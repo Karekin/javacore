@@ -13,18 +13,18 @@
   <url>https://github.com/dunwu/javacore</url>
 
   <modules>
-    <module>codes/javacore-basics</module>
-    <module>codes/javacore-advanced</module>
-    <module>codes/javacore-container</module>
-    <module>codes/javacore-io</module>
-    <module>codes/javacore-effective</module>
-    <module>codes/javacore-jdk8</module>
-    <module>codes/javacore-jvm</module>
-    <module>codes/javacore-concurrent</module>
-    <module>codes/javacore-utils</module>
-    <module>codes/javacore-oop</module>
-    <module>codes/javacore-in-web</module>
-    <module>codes/bytecode</module>
+    <module>javacore-basics</module>
+    <module>javacore-advanced</module>
+    <module>javacore-container</module>
+    <module>javacore-io</module>
+    <module>javacore-effective</module>
+    <module>javacore-jdk8</module>
+    <module>javacore-jvm</module>
+    <module>javacore-concurrent</module>
+    <module>javacore-utils</module>
+    <module>javacore-oop</module>
+    <module>javacore-in-web</module>
+    <module>bytecode</module>
   </modules>
 
   <dependencyManagement>
