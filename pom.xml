@@ -13,6 +13,7 @@
   <url>https://github.com/dunwu/javacore</url>
 
   <modules>
+    <module>javacore-bytecode</module>
     <module>javacore-basics</module>
     <module>javacore-advanced</module>
     <module>javacore-container</module>
@@ -24,7 +25,7 @@
     <module>javacore-utils</module>
     <module>javacore-oop</module>
     <module>javacore-in-web</module>
-    <module>bytecode</module>
+    <module>javacore-bytecode</module>
   </modules>
 
   <dependencyManagement>
