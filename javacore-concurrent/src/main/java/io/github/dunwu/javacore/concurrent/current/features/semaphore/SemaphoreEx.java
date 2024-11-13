@@ -9,6 +9,8 @@ import java.util.function.Function;
  * 描述:
  * Semaphore example
  *  acquire() 为原子操作 保证只有一个线程能将count减为0 则其他线程阻塞等待，release()+1后得以执行
+ *  TODO 预算项目使用 Semaphore 和阻塞队列进行批量导出
+ *  com.yonyou.epm.mdform.api.taskqueue.SemaphoreTaskQueueService
  * @author zed
  * @since 2019-06-17 3:50 PM
  */
