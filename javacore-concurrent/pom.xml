@@ -7,6 +7,7 @@
     <groupId>io.github.dunwu.javacore</groupId>
     <artifactId>javacore</artifactId>
     <version>1.0.1</version>
+    <relativePath>../pom.xml</relativePath> <!-- 指向根 pom.xml 的路径 -->
   </parent>
 
   <artifactId>javacore-concurrent</artifactId>
@@ -74,7 +75,6 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>20.0</version>
     </dependency>
 
     <!-- Spring Boot Starter for testing -->
