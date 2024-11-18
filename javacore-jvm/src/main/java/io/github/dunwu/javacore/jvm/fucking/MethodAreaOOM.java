@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.jvm.memory;
+package io.github.dunwu.javacore.jvm.fucking;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;

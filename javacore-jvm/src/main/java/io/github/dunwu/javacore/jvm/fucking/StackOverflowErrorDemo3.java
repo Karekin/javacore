@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.jvm.memory;
+package io.github.dunwu.javacore.jvm.fucking;
 
 /**
  * 虚拟机栈和本地方法栈测试

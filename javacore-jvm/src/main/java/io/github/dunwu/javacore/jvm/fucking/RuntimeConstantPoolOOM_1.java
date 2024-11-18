@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.jvm.error;
+package io.github.dunwu.javacore.jvm.fucking;
 
 import java.util.HashSet;
 import java.util.Set;

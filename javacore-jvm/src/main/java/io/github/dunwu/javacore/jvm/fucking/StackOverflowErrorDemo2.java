@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.jvm.memory;
+package io.github.dunwu.javacore.jvm.fucking;
 
 /**
  * 类成员循环依赖，导致 StackOverflowError

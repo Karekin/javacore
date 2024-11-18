@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.jvm.memory;
+package io.github.dunwu.javacore.jvm.fucking;
 
 /**
  * 创建线程导致内存溢出（执行要慎重）

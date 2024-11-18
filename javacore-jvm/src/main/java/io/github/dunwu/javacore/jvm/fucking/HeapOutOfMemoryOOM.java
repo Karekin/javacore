@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.jvm.memory;
+package io.github.dunwu.javacore.jvm.fucking;
 
 /**
  * 堆溢出示例
