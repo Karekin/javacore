@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.serial;
+package io.github.dunwu.javacore.serialize;
 
 import java.io.*;
 

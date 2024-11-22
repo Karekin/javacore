@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_package = "io.github.dunwu.javacore.serialize.stream"; // 生成类的包名，注意：会在指定路径下按照该包名的定义来生成文件夹
+option java_outer_classname="DemoProtos"; // 生成类的类名，注意：下划线的命名会在编译的时候被自动改为驼峰命名
+
+// 定义一个 message
+message User {
+  int32 id = 1; // int 类型
+  string name = 2; // string 类型
+  string email = 3;
+  Gender gender = 4; // 引用下面定义的 Gender 枚举类型
+  repeated PhoneNumber phone = 5; // 引用下面定义的 PhoneNumber 类型的 message
+  map<string, string> tags = 6; // map 类型
+
+  // 定义一个枚举类型
+  enum Gender {
+    DEFAULT = 0;
+    MALE = 1;
+    FEMALE = 2; // 枚举值通常大写
+  }
+
+  // 定义一个 message 用于电话号码
+  message PhoneNumber {
+    string number = 1;
+    PhoneType type = 2;
+
+    enum PhoneType {
+      MOBILE = 0;
+      HOME = 1;
+      WORK = 2;
+    }
+  }
+}

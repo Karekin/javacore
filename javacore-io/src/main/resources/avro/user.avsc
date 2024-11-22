@@ -1,0 +1,58 @@
+{
+  "type": "record",
+  "name": "User",
+  "namespace": "io.github.dunwu.javacore.serialize.stream",
+  "fields": [
+    {
+      "name": "id",
+      "type": "int"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "email",
+      "type": "string"
+    },
+    {
+      "name": "gender",
+      "type": {
+        "type": "enum",
+        "name": "Gender",
+        "symbols": ["DEFAULT", "MALE", "FEMALE"]
+      }
+    },
+    {
+      "name": "phone",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "PhoneNumber",
+          "fields": [
+            {
+              "name": "number",
+              "type": "string"
+            },
+            {
+              "name": "type",
+              "type": {
+                "type": "enum",
+                "name": "PhoneType",
+                "symbols": ["MOBILE", "HOME", "WORK"]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "tags",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    }
+  ]
+}

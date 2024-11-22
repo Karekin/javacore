@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.serial;
+package io.github.dunwu.javacore.serialize;
 
 public class Employee implements java.io.Serializable {
 
