@@ -27,32 +27,44 @@ public class Visibility {
      * 通过boolean 变量更加直观
      */
     private static boolean flag = true;
-    public static void main(String[] args) {
-//        System.out.println(calc());
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println(calc());
 
-        System.out.println("start");
-        //线程开始
-        threadPoolExecutor.execute(() -> {
-            while(flag){
-
-            }
-            System.out.println("stop");
-
-        });
-        ThreadUtil.sleep(100);
-        flag = false;
+//        System.out.println("start");
+//        //线程开始
+//        threadPoolExecutor.execute(() -> {
+//            while(flag){
+//
+//            }
+//            // 子线程永远不会跳出循环
+//            System.out.println("stop");
+//
+//        });
+//        ThreadUtil.sleep(100);
+//        flag = false;
     }
-    private static long calc(){
+//    private static long calc(){ TODO 为什么用线程池的写法，结果和单线程执行的结果一致呢？
+//        final Visibility visibility = new Visibility();
+//        threadPoolExecutor.execute(visibility::add10k);
+//        threadPoolExecutor.execute(visibility::add10k);
+//        /*
+//         * 调用shuntDown保证线程执行完毕
+//         */
+//        threadPoolExecutor.shutdown();
+//        return count;
+//
+//    }
+
+    private static long calc() throws InterruptedException {
         final Visibility visibility = new Visibility();
-        threadPoolExecutor.execute(visibility::add10k);
-        threadPoolExecutor.execute(visibility::add10k);
-        /*
-         * 调用shuntDown保证线程执行完毕
-         */
-        threadPoolExecutor.shutdown();
+        Thread th1 = new Thread(visibility::add10k);
+        Thread th2 = new Thread(visibility::add10k);
+        th1.start();
+        th2.start();
+
+        th1.join();
+        th2.join();
         return count;
-
     }
-
 }
 

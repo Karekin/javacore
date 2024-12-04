@@ -58,6 +58,9 @@ public class FinalExample {
             // 读取 f 对象的字段 x 和 y
             int i = f.x;  // 读取 final 变量 x
             int j = f.y;  // 读取非 final 变量 y
+            // TDOO 没复现出“逸出”导致的指令重排问题
+            System.out.println("final 变量 x 的值为：" + i);
+            System.out.println("final 变量 y 的值为：" + j);
         }
     }
 

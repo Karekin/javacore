@@ -3,10 +3,11 @@ package io.github.dunwu.javacore.concurrent.current.features.synchronizedcase;
 /**
  * 描述:
  * Synchronized 实现原理 基于操作系统 Mutex Lock (互斥锁)实现，
- *      所以每次获取和释放都会有用户态和内核态的切换，成本高，jdk1.5之前性能差
+ * 所以每次获取和释放都会有用户态和内核态的切换，成本高，jdk1.5之前性能差
  * JVM 通过 ACC_SYNCHRONIZED 标识一个方法是否为同步方法,
- *      而代码块则通过 monitorenter 和 monitorexit 指令操作 monitor 对象
- ** @author zed
+ * 而代码块则通过 monitorenter 和 monitorexit 指令操作 monitor 对象
+ * * @author zed
+ *
  * @since 2019-06-13 11:47 AM
  */
 
@@ -37,6 +38,7 @@ public class SynchronizedExample {
          * 使用 synchronized 块，锁对象为自定义的锁 obj
          */
         private final Object obj = new Object();
+
         void put() {
             synchronized (obj) {
                 System.out.println("Synchronized block: locked by custom object (obj)");
@@ -164,7 +166,11 @@ public class SynchronizedExample {
         /**
          * synchronized get 方法用于读取 value，确保原子性
          */
-        public synchronized long get() {
+//        public synchronized long get() {
+//            return value;
+//        }
+        // TODO 不加锁没有复现出可见性问题
+        public long get() {
             return value;
         }
 
