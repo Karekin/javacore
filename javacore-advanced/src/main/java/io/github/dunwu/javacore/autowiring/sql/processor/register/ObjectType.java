@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.registry;
+package io.github.dunwu.javacore.autowiring.sql.processor.register;
 
 import org.springframework.stereotype.Component;
 

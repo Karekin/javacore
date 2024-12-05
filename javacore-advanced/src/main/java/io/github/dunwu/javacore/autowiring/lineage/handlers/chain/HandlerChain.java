@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.handler;
+package io.github.dunwu.javacore.autowiring.lineage.handlers.chain;
 
 import org.springframework.stereotype.Component;
 

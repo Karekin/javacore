@@ -1,9 +1,10 @@
-package io.github.dunwu.javacore.autowiring.consumer.handlers;
+package io.github.dunwu.javacore.autowiring.mq.consumer.handlers;
 
 /**
+ *  【背景描述】
+ *  kafka 消费者需要灵活选择处理器，避免硬编码，将框架代码和逻辑代码解耦
  *
- * 如何运行？
-
+ * 【如何运行？】
  * 这个简化的示例演示了如何在Spring框架中使用依赖注入来处理基于类型映射的消息处理。
  * 在真实的Kafka集成场景中，你还需要配置Kafka相关的依赖和属性，以及实际的消息监听方法。
  *

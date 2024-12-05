@@ -1,6 +1,5 @@
-package io.github.dunwu.javacore.handler;
+package io.github.dunwu.javacore.autowiring.lineage.handlers.chain;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

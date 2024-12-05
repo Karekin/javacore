@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.autowiring.consumer.handlers;
+package io.github.dunwu.javacore.autowiring.mq.consumer.handlers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

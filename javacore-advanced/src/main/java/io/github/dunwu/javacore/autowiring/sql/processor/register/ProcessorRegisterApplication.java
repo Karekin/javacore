@@ -1,10 +1,13 @@
-package io.github.dunwu.javacore.registry;
+package io.github.dunwu.javacore.autowiring.sql.processor.register;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
+ * 【背景描述】
+ *  SQL处理器数量很多，显式注册逻辑复杂，可以通过bean拦截器BeanPostProcessor，在服务启动时注册所有的处理器
+ *
  * 一、自动注册处理器：
  * Spring 容器在初始化 ExampleProcessor 时，由 ProcessorRegistrationInterceptor 自动拦截。
  * 检查是否有 @ObjectType 注解，如果有则将其注册到 ProcessorRegister。
@@ -31,7 +34,7 @@ public class ProcessorRegisterApplication implements CommandLineRunner {
 
         if (processor != null) {
             System.out.println("Processor found. Invoking process method...");
-            ((io.github.dunwu.javacore.registry.ExampleProcessor) processor).process(exampleType);
+            ((ExampleProcessor) processor).process(exampleType);
         } else {
             System.out.println("No processor found for type: " + ExampleType.class.getSimpleName());
         }

@@ -1,4 +1,4 @@
-package io.github.dunwu.javacore.autowiring.consumer.handlers;
+package io.github.dunwu.javacore.autowiring.mq.consumer.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,12 @@ import java.util.Map;
 public class KafkaMessageListener {
 
     private static final Logger log = LoggerFactory.getLogger(KafkaMessageListener.class);
-
+    /**
+     * 【待验证】
+     * 如果注入的是 Map 类型，key是bean名称（可能被注解的value方法覆盖），value是bean实例
+     * 如果注入的是 List 类型，元素是bean实例
+     * 如果注入的是 对象 类型，元素是接口的某一种实现，根据优先级选择
+     */
     @Autowired
     private Map<String, BaseMessageHandler> messageHandlerMap;
 
