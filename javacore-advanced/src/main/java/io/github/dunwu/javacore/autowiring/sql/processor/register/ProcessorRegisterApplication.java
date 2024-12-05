@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 【背景描述】
  *  SQL处理器数量很多，显式注册逻辑复杂，可以通过bean拦截器BeanPostProcessor，在服务启动时注册所有的处理器
- *
+ * 【原型系统】
+ *  实时血缘系统
+ * 【特点说明】
  * 一、自动注册处理器：
  * Spring 容器在初始化 ExampleProcessor 时，由 ProcessorRegistrationInterceptor 自动拦截。
  * 检查是否有 @ObjectType 注解，如果有则将其注册到 ProcessorRegister。
