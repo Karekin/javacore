@@ -78,6 +78,23 @@ public class HandlerChain {
 
     private final List<IHandler> handlerList;
 
+    /**
+     * HandlerChain 初始化的时候会收集所有实现了IHandler的类，那么HandlerChain 初始化是在什么时候？
+     * 在Spring框架中，`HandlerChain` 的初始化通常发生在Spring应用的启动过程中。
+     * 当Spring Boot应用启动时，Spring容器会进行以下几个步骤：
+     * 1. 启动并初始化Spring上下文：这包括加载配置、创建和注册Bean定义等。
+     * 2. 依赖注入：Spring容器会查找并自动装配依赖关系，比如通过 `@Autowired` 注解自动注入依赖的Bean。
+     * 3. Bean的实例化：当你的 `HandlerChain` 类标有 `@Component` 注解时，
+     *      Spring会在容器启动期间实例化它，并处理所有依赖的注入。
+     * 4. 自动收集：`HandlerChain` 类会收集实现了 `IHandler` 接口的所有类。
+     *      这通常是通过 Spring 的自动装配功能实现的，如通过构造函数注入所有 `IHandler` 类型的Bean。
+     *
+     * 因此，`HandlerChain` 的初始化和自动收集实现类的具体时机是在Spring应用启动的一部分，
+     * 具体是在Spring容器初始化所有Bean后，且依赖注入完成时。
+     * 这使得在应用程序的其他部分（例如控制器中）使用 `HandlerChain` 时，它已经被完全配置并准备好处理请求。
+     *
+     * @param handlerList
+     */
     public HandlerChain(List<IHandler> handlerList) {
         this.handlerList = handlerList;
     }
