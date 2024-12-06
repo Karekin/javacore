@@ -11,6 +11,13 @@
 
   <artifactId>javacore-advanced</artifactId>
   <name>JavaCore :: Advanced</name>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>javacore-advanced-others</module>
+    <module>javacore-advanced-spi</module>
+    <module>javacore-advanced-autowire</module>
+  </modules>
 
   <properties>
     <java.version>1.8</java.version>
