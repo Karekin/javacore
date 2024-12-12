@@ -147,4 +147,89 @@ public class EntitySheetBoTest {
         // 打印 TreeSet 内容
         System.out.println("TreeSet contents: " + entitySheetBos);
     }
+
+    /**
+     * 向后（开始节点的方向）递归（取沿途所有对象）
+     * @param toProcess: 待处理的节点-流程维对象
+     * @return nodesMap: 节点id到有关系流程维的映射
+     */
+    private Set<EntitySheetBo> wrongRecurseBackward4Carried(List<WFNodeCarriedBo> toProcess) {
+        Set<EntitySheetBo> entitySheetBos = new HashSet<>();
+        Set<WFNodeCarriedBo> visited = new HashSet<>();
+        List<WFNodeCarriedBo> cloneToProcess = new ArrayList<>(toProcess);
+
+        while (!cloneToProcess.isEmpty()) {
+            WFNodeCarriedBo current = cloneToProcess.remove(cloneToProcess.size() - 1);
+            if (visited.contains(current)) {
+                continue;
+            }
+            visited.add(current);
+
+            String nodeId = current.getNodeId();
+            String dimCode = current.getDimCode();
+
+            EntitySheetBo currEntitySheetBo = entitySheetBos.stream()
+                    .filter(entitySheetBo -> nodeId.equals(entitySheetBo.getNodeId()) && dimCode.equals(entitySheetBo.getEntity()))
+                    .findFirst()
+                    .orElseGet(() -> {
+                        EntitySheetBo newEntitySheetBo = new EntitySheetBo(nodeId, dimCode, new HashSet<>());
+                        entitySheetBos.add(newEntitySheetBo);
+                        return newEntitySheetBo;
+                    });
+
+            currEntitySheetBo.getSheetId().add(current.getCarriedCode());
+
+            current.getPrevNodeCarriedBo().stream()
+                    .filter(flowDim -> !visited.contains(flowDim))
+                    .forEach(cloneToProcess::add);
+        }
+
+        return entitySheetBos;
+    }
+
+    private Set<EntitySheetBo> correctRecurseBackward4Carried(List<WFNodeCarriedBo> toProcess) {
+        Set<EntitySheetBo> entitySheetBos = new HashSet<>();
+        Set<WFNodeCarriedBo> visited = new HashSet<>();
+        List<WFNodeCarriedBo> cloneToProcess = new ArrayList<>(toProcess);
+
+        while (!cloneToProcess.isEmpty()) {
+            WFNodeCarriedBo current = cloneToProcess.remove(cloneToProcess.size() - 1);
+            if (visited.contains(current)) {
+                continue;
+            }
+            visited.add(current);
+
+            String nodeId = current.getNodeId();
+            String dimCode = current.getDimCode();
+
+            // 找到当前对应的 EntitySheetBo 或创建一个新对象
+            EntitySheetBo existingEntitySheetBo = entitySheetBos.stream()
+                    .filter(entitySheetBo -> nodeId.equals(entitySheetBo.getNodeId()) && dimCode.equals(entitySheetBo.getEntity()))
+                    .findFirst()
+                    .orElse(null);
+
+            // 如果存在，创建一个新的对象代替旧对象，避免直接修改集合中元素的属性值，否则会出现在哈希桶中找不到元素的情况
+            if (existingEntitySheetBo != null) {
+                // 创建一个新对象，包含原有的 sheetId 和新的 current.getCarriedCode()
+                Set<String> updatedSheetId = new HashSet<>(existingEntitySheetBo.getSheetId());
+                updatedSheetId.add(current.getCarriedCode());
+                EntitySheetBo updatedEntitySheetBo = new EntitySheetBo(nodeId, dimCode, updatedSheetId);
+
+                // 用新对象替换旧对象
+                entitySheetBos.remove(existingEntitySheetBo);
+                entitySheetBos.add(updatedEntitySheetBo);
+            } else {
+                // 如果不存在，直接创建并添加新对象
+                EntitySheetBo newEntitySheetBo = new EntitySheetBo(nodeId, dimCode, new HashSet<>(Collections.singleton(current.getCarriedCode())));
+                entitySheetBos.add(newEntitySheetBo);
+            }
+
+            // 处理前置节点
+            current.getPrevNodeCarriedBo().stream()
+                    .filter(flowDim -> !visited.contains(flowDim))
+                    .forEach(cloneToProcess::add);
+        }
+
+        return entitySheetBos;
+    }
 }
