@@ -14,16 +14,76 @@
     <name>javacore-advanced-spi</name>
     <url>http://maven.apache.org</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>com.hw.lineage</groupId>-->
+<!--            <artifactId>lineage-common</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>test-plugin-a</id>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>process-test-classes</phase>
+                        <configuration>
+                            <finalName>plugin-a</finalName>
+                            <attach>false</attach>
+                            <descriptors>
+                                <descriptor>src/test/assemblies/test-plugin-a-assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-plugin-b</id>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>process-test-classes</phase>
+                        <configuration>
+                            <finalName>plugin-b</finalName>
+                            <attach>false</attach>
+                            <descriptors>
+                                <descriptor>src/test/assemblies/test-plugin-b-assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
