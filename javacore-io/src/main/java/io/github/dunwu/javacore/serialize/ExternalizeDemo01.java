@@ -1,7 +1,5 @@
 package io.github.dunwu.javacore.serialize;
 
-import io.github.dunwu.javacore.serialize.stream.PhoneNumber;
-
 import java.io.*;
 
 /**
