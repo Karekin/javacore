@@ -1,4 +1,5 @@
 package io.github.dunwu.javacore.bio;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,8 +18,8 @@ public class BioServer {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("[服务端] 接收到客户端连接: " + clientSocket.getInetAddress());
 
-                // 处理客户端请求
-                handleClient(clientSocket);
+                // 为每个客户端启动一个独立线程
+                new Thread(() -> handleClient(clientSocket)).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,5 +53,3 @@ public class BioServer {
         }
     }
 }
-
-
