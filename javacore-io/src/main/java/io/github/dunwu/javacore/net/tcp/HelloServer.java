@@ -1,25 +1,35 @@
 package io.github.dunwu.javacore.net.tcp;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * A simple TCP server that sends a "hello world" message to a client.
+ */
 public class HelloServer {
 
-    public static void main(String[] args) throws Exception {
-        // Socket 服务端
-        // 服务器在8888端口上监听
-        ServerSocket server = new ServerSocket(8888);
-        System.out.println("服务器运行中，等待客户端连接。");
-        // 得到连接，程序进入到阻塞状态
-        Socket client = server.accept();
-        // 打印流输出最方便
-        PrintStream out = new PrintStream(client.getOutputStream());
-        // 向客户端输出信息
-        out.println("hello world");
-        client.close();
-        server.close();
-        System.out.println("服务器已向客户端发送消息，退出。");
-    }
+    private static final int PORT = 8888;
 
+    public static void main(String[] args) {
+        System.out.println("服务器运行中，等待客户端连接...");
+
+        try (ServerSocket server = new ServerSocket(PORT)) {
+            // 等待客户端连接（阻塞操作）
+            try (Socket client = server.accept();
+                 PrintStream out = new PrintStream(client.getOutputStream())) {
+
+                // 向客户端发送信息
+                out.println("hello world");
+                System.out.println("服务器已向客户端发送消息。");
+            } catch (IOException e) {
+                System.err.println("处理客户端连接时发生错误: " + e.getMessage());
+            }
+        } catch (IOException e) {
+            System.err.println("服务器启动失败: " + e.getMessage());
+        }
+
+        System.out.println("服务器已关闭。");
+    }
 }

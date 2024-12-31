@@ -3,16 +3,33 @@ package io.github.dunwu.javacore.net.udp;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
+/**
+ * A simple UDP client that receives a message from a server.
+ */
 public class UDPClient {
 
-    public static void main(String[] args) throws Exception { // 所有异常抛出
-        byte[] buf = new byte[1024]; // 开辟空间，以接收数据
-        DatagramSocket ds = new DatagramSocket(9000); // 客户端在9000端口上等待服务器发送信息
-        DatagramPacket dp = new DatagramPacket(buf, 1024); // 所有的信息使用buf保存
-        ds.receive(dp); // 接收数据
-        String str = new String(dp.getData(), 0, dp.getLength()) + "from " + dp.getAddress().getHostAddress() + "："
-            + dp.getPort();
-        System.out.println(str); // 输出内容
-    }
+    private static final int CLIENT_PORT = 9000;
+    private static final int BUFFER_SIZE = 1024;
 
+    public static void main(String[] args) {
+        System.out.println("UDP客户端启动，等待接收消息...");
+
+        try (DatagramSocket socket = new DatagramSocket(CLIENT_PORT)) {
+            // 创建用于接收数据的数据包
+            byte[] buffer = new byte[BUFFER_SIZE];
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
+            // 接收数据
+            socket.receive(packet);
+
+            // 解析数据并输出
+            String message = new String(packet.getData(), 0, packet.getLength());
+            String senderInfo = "from " + packet.getAddress().getHostAddress() + ":" + packet.getPort();
+            System.out.println("接收到的消息: " + message + " " + senderInfo);
+        } catch (Exception e) {
+            System.err.println("接收消息时发生错误: " + e.getMessage());
+        }
+
+        System.out.println("UDP客户端退出。");
+    }
 }
