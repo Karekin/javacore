@@ -3,61 +3,81 @@ package io.github.dunwu.javacore.bio.chars;
 import java.io.*;
 
 /**
- * Reader 和 Writer 示例
+ * Reader 和 Writer 示例。
+ * <p>
+ * 演示通过 {@link FileWriter} 和 {@link FileReader} 进行文件读写操作。
+ * </p>
  *
- * @author <a href="mailto:forbreak@163.com">Zhang Peng</a>
+ * 功能：
+ * 1. 写入指定内容到文件。
+ * 2. 读取文件内容并输出。
+ *
+ * @author Zhang Peng
  */
 public class FileReadWriteDemo {
 
     private static final String FILEPATH = "temp.log";
 
-    public static void main(String[] args) throws IOException {
-        write(FILEPATH);
-        System.out.println("内容为：" + new String(read(FILEPATH)));
-    }
-
-    public static void write(String filepath) throws IOException {
-        // 1.使用 File 类绑定一个文件
-        File f = new File(filepath);
-
-        // 2.把 File 对象绑定到流对象上
-        Writer out = new FileWriter(f);
-        // Writer out = new FileWriter(f, true); // 追加内容方式
-
-        // 3.进行读或写操作
-        String str = "Hello World!!!\r\n";
-        out.write(str);
-
-        // 4.关闭流
-        // 字符流操作时使用了缓冲区，并在关闭字符流时会强制将缓冲区内容输出
-        // 如果不关闭流，则缓冲区的内容是无法输出的
-        // 如果想在不关闭流时，将缓冲区内容输出，可以使用 flush 强制清空缓冲区
-        out.flush();
-        out.close();
-    }
-
-    public static char[] read(String filepath) throws IOException {
-        // 1.使用 File 类绑定一个文件
-        File f = new File(filepath);
-
-        // 2.把 File 对象绑定到流对象上
-        Reader input = new FileReader(f);
-
-        // 3.进行读或写操作
-        int temp = 0; // 接收每一个内容
-        int len = 0; // 读取内容
-        char[] c = new char[1024];
-        while ((temp = input.read()) != -1) {
-            // 如果不是-1就表示还有内容，可以继续读取
-            c[len] = (char) temp;
-            len++;
+    public static void main(String[] args) {
+        try {
+            write(FILEPATH, "Hello World!!!\r\n");
+            String content = read(FILEPATH);
+            System.out.println("读取的文件内容为：\n" + content);
+        } catch (IOException e) {
+            System.err.println("文件操作失败：" + e.getMessage());
+            e.printStackTrace();
         }
-        System.out.println("文件字符数为：" + len);
-
-        // 4.关闭流
-        input.close();
-
-        return c;
     }
 
+    /**
+     * 将指定内容写入文件。
+     *
+     * @param filepath 文件路径
+     * @param content  要写入的内容
+     * @throws IOException 如果写入失败
+     */
+    public static void write(String filepath, String content) throws IOException {
+        File file = new File(filepath);
+
+        // 确保父目录存在
+        if (file.getParentFile() != null && !file.getParentFile().exists()) {
+            if (!file.getParentFile().mkdirs()) {
+                throw new IOException("无法创建父目录：" + file.getParent());
+            }
+        }
+
+        // 使用 try-with-resources 确保流自动关闭
+        try (Writer writer = new FileWriter(file)) {
+            writer.write(content);
+            System.out.println("内容已写入文件：" + filepath);
+        }
+    }
+
+    /**
+     * 从指定文件读取内容。
+     *
+     * @param filepath 文件路径
+     * @return 读取的内容
+     * @throws IOException 如果读取失败
+     */
+    public static String read(String filepath) throws IOException {
+        File file = new File(filepath);
+
+        // 检查文件是否存在
+        if (!file.exists()) {
+            throw new FileNotFoundException("文件不存在：" + filepath);
+        }
+
+        // 使用 try-with-resources 确保流自动关闭
+        StringBuilder content = new StringBuilder();
+        try (Reader reader = new FileReader(file)) {
+            char[] buffer = new char[1024];
+            int length;
+            while ((length = reader.read(buffer)) != -1) {
+                content.append(buffer, 0, length);
+            }
+        }
+
+        return content.toString();
+    }
 }

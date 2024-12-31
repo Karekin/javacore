@@ -4,4 +4,4 @@
  * @author <a href="mailto:forbreak@163.com">Zhang Peng</a>
  * @since 2020-02-19
  */
-package io.github.dunwu.javacore.io;
+package io.github.dunwu.javacore.base;

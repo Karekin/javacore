@@ -1,52 +1,97 @@
 package io.github.dunwu.javacore.nio.selector;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * 基于 NIO 的日期服务器，支持多个端口监听。
+ *
+ * 验证方法：启动服务器后，在终端中使用 telnet 测试：telnet localhost 8000
+ */
 public class DateServer {
 
-    public static void main(String[] args) throws Exception {
-        int[] ports = { 8000, 8001, 8002, 8003, 8005, 8006 }; // 表示五个监听端口
-        Selector selector = Selector.open(); // 通过open()方法找到Selector
-        for (int i = 0; i < ports.length; i++) {
-            ServerSocketChannel initSer = null;
-            initSer = ServerSocketChannel.open(); // 打开服务器的通道
-            initSer.configureBlocking(false); // 服务器配置为非阻塞
-            ServerSocket initSock = initSer.socket();
-            InetSocketAddress address = null;
-            address = new InetSocketAddress(ports[i]); // 实例化绑定地址
-            initSock.bind(address); // 进行服务的绑定
-            initSer.register(selector, SelectionKey.OP_ACCEPT); // 等待连接
-            System.out.println("服务器运行，在" + ports[i] + "端口监听。");
-        }
-        // 要接收全部生成的key，并通过连接进行判断是否获取客户端的输出
-        int keysAdd = 0;
-        while ((keysAdd = selector.select()) > 0) { // 选择一组键，并且相应的通道已经准备就绪
-            Set<SelectionKey> selectedKeys = selector.selectedKeys();// 取出全部生成的key
-            Iterator<SelectionKey> iter = selectedKeys.iterator();
-            while (iter.hasNext()) {
-                SelectionKey key = iter.next(); // 取出每一个key
-                if (key.isAcceptable()) {
-                    ServerSocketChannel server = (ServerSocketChannel) key.channel();
-                    SocketChannel client = server.accept(); // 接收新连接
-                    client.configureBlocking(false);// 配置为非阻塞
-                    ByteBuffer outBuf = ByteBuffer.allocateDirect(1024); //
-                    outBuf.put(("当前的时间为：" + new Date()).getBytes()); // 向缓冲区中设置内容
-                    outBuf.flip();
-                    client.write(outBuf); // 输出内容
-                    client.close(); // 关闭
+    private static final int[] PORTS = {8000, 8001, 8002, 8003, 8005, 8006};
+
+    public static void main(String[] args) {
+        try (Selector selector = Selector.open()) {
+            // 初始化多个服务器通道
+            for (int port : PORTS) {
+                ServerSocketChannel serverChannel = ServerSocketChannel.open();
+                serverChannel.configureBlocking(false);
+                serverChannel.socket().bind(new InetSocketAddress(port));
+                serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+                System.out.println("服务器运行，在 " + port + " 端口监听。");
+            }
+
+            // 轮询处理事件
+            while (true) {
+                int readyChannels = selector.select();
+                if (readyChannels == 0) {
+                    continue;
+                }
+
+                Set<SelectionKey> selectedKeys = selector.selectedKeys();
+                Iterator<SelectionKey> iterator = selectedKeys.iterator();
+
+                while (iterator.hasNext()) {
+                    SelectionKey key = iterator.next();
+                    try {
+                        if (key.isAcceptable()) {
+                            handleAccept(key);
+                        }
+                    } catch (IOException e) {
+                        System.err.println("处理客户端连接时出错：" + e.getMessage());
+                        e.printStackTrace();
+                        key.cancel(); // 取消出错的 key
+                    } finally {
+                        iterator.remove(); // 移除已处理的 key
+                    }
                 }
             }
-            selectedKeys.clear(); // 清楚全部的key
+        } catch (IOException e) {
+            System.err.println("服务器运行时出错：" + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    /**
+     * 处理新客户端的连接。
+     *
+     * @param key 表示一个客户端连接的 SelectionKey
+     * @throws IOException 如果发生 IO 错误
+     */
+    private static void handleAccept(SelectionKey key) throws IOException {
+        ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
+        SocketChannel clientChannel = serverChannel.accept();
+        if (clientChannel != null) {
+            String clientAddress = null;
+            try {
+                clientAddress = String.valueOf(clientChannel.getRemoteAddress());
+            } catch (IOException e) {
+                System.err.println("获取客户端地址失败：" + e.getMessage());
+            }
+
+            System.out.println("接受来自客户端的连接：" + (clientAddress != null ? clientAddress : "未知地址"));
+            clientChannel.configureBlocking(false);
+
+            ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+            String response = "当前的时间为：" + new Date();
+            buffer.put(response.getBytes());
+            buffer.flip();
+            clientChannel.write(buffer);
+            System.out.println("已发送响应：" + response);
+
+            try {
+                clientChannel.close();
+                System.out.println("关闭客户端连接：" + (clientAddress != null ? clientAddress : "未知地址"));
+            } catch (IOException e) {
+                System.err.println("关闭客户端连接失败：" + e.getMessage());
+            }
+        }
+    }
 }

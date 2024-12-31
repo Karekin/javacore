@@ -5,89 +5,93 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 /**
- * 管道流
+ * 管道流示例。
+ * <p>
+ * 使用 {@link PipedInputStream} 和 {@link PipedOutputStream} 实现两个线程间的数据传输。
+ * </p>
  *
- * @author <a href="mailto:forbreak@163.com">Zhang Peng</a>
- * @since 2018/4/26
  */
 public class PipedStreamDemo {
 
     public static void main(String[] args) {
-        Send s = new Send();
-        Receive r = new Receive();
+        Sender sender = new Sender();
+        Receiver receiver = new Receiver();
+
+        // 连接管道输入流和输出流
         try {
-            s.getPos().connect(r.getPis()); // 连接管道
+            sender.getOutputStream().connect(receiver.getInputStream());
         } catch (IOException e) {
+            System.err.println("管道连接失败: " + e.getMessage());
             e.printStackTrace();
         }
-        new Thread(s).start(); // 启动线程
-        new Thread(r).start(); // 启动线程
+
+        // 启动线程
+        new Thread(sender, "Sender-Thread").start();
+        new Thread(receiver, "Receiver-Thread").start();
     }
 
-    static class Send implements Runnable {
+    /**
+     * 数据发送线程。
+     */
+    static class Sender implements Runnable {
+        private final PipedOutputStream outputStream;
 
-        private PipedOutputStream pos = null;
-
-        Send() {
-            pos = new PipedOutputStream(); // 实例化输出流
+        Sender() {
+            this.outputStream = new PipedOutputStream();
         }
 
         @Override
         public void run() {
-            String str = "Hello World!!!";
-            try {
-                pos.write(str.getBytes());
+            String message = "Hello World!!!";
+            try (PipedOutputStream out = this.outputStream) {
+                System.out.println(Thread.currentThread().getName() + " 正在发送数据: " + message);
+                out.write(message.getBytes());
             } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                pos.close();
-            } catch (IOException e) {
+                System.err.println("发送数据时发生错误: " + e.getMessage());
                 e.printStackTrace();
             }
         }
 
         /**
-         * 得到此线程的管道输出流
+         * 获取管道输出流。
+         *
+         * @return {@link PipedOutputStream}
          */
-        PipedOutputStream getPos() {
-            return pos;
+        PipedOutputStream getOutputStream() {
+            return this.outputStream;
         }
-
     }
 
-    static class Receive implements Runnable {
+    /**
+     * 数据接收线程。
+     */
+    static class Receiver implements Runnable {
+        private final PipedInputStream inputStream;
 
-        private PipedInputStream pis = null;
-
-        Receive() {
-            pis = new PipedInputStream();
+        Receiver() {
+            this.inputStream = new PipedInputStream();
         }
 
         @Override
         public void run() {
-            byte[] b = new byte[1024];
-            int len = 0;
-            try {
-                len = pis.read(b);
+            byte[] buffer = new byte[1024];
+            try (PipedInputStream in = this.inputStream) {
+                int length = in.read(buffer);
+                String receivedMessage = new String(buffer, 0, length);
+                System.out.println(Thread.currentThread().getName() + " 接收到的数据: " + receivedMessage);
             } catch (IOException e) {
+                System.err.println("接收数据时发生错误: " + e.getMessage());
                 e.printStackTrace();
             }
-            try {
-                pis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("接收的内容为：" + new String(b, 0, len));
         }
 
         /**
-         * 得到此线程的管道输入流
+         * 获取管道输入流。
+         *
+         * @return {@link PipedInputStream}
          */
-        PipedInputStream getPis() {
-            return pis;
+        PipedInputStream getInputStream() {
+            return this.inputStream;
         }
-
     }
-
 }
