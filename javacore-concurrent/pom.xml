@@ -13,7 +13,7 @@
     <version>1.0.1</version>
 
     <modules>
-        <module>javacore-concurrent-base</module>
+<!--        <module>javacore-concurrent-base</module>-->
         <module>dynamic-thread-pool</module>
     </modules>
 
