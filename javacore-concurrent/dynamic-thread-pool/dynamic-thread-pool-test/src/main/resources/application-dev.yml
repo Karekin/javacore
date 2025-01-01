@@ -20,7 +20,7 @@ dynamic:
         # 状态；true = 开启、false 关闭
         enabled: true
         # redis host
-        host: 192.168.1.108
+        host: 192.168.1.4
         # redis port
         port: 16379
 

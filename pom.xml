@@ -26,6 +26,7 @@
     <module>javacore-in-web</module>
     <module>javacore-bytecode</module>
     <module>javacore-concurrent</module>
+      <module>distributed</module>
   </modules>
 
   <dependencyManagement>
