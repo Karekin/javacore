@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.think.in.java</groupId>
-        <artifactId>lu-raft-parent</artifactId>
+        <artifactId>lu-raft-kv</artifactId>
         <version>1.0-RELEASE</version>
     </parent>
 
