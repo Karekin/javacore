@@ -1,5 +1,6 @@
 !!! 关注 https://github.com/foldright/cffu 项目，及作者博客：https://juejin.cn/column/7413672189316038719
 
+项目来源：https://github.com/aliakh/demo-java-completablefuture
 
 # Asynchronous programming in Java with CompletableFuture
 
